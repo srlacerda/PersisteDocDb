@@ -11,5 +11,23 @@
     <PackageReference Include="Amazon.Lambda.Core" Version="1.2.0" />
     <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.1.0" />
     <PackageReference Include="Amazon.Lambda.SQSEvents" Version="1.2.0" />
+    <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Domain\Constants\" />
+    <Folder Include="Domain\Enums\" />
+    <Folder Include="Infrastructure\Messaging\" />
+    <Folder Include="Infrastructure\S3\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Pacote.Core.Domain.Model\Pacote.Core.Domain.Model.csproj" />
+    <ProjectReference Include="..\Pacote.Core.Domain.Util\Pacote.Core.Domain.Util.csproj" />
   </ItemGroup>
 </Project>

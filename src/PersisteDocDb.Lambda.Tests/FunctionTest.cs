@@ -33,7 +33,7 @@ namespace PersisteDocDb.Lambda.Tests
                 Logger = logger
             };
 
-            var function = new Function();
+            var function = new Functions();
             await function.FunctionHandler(sqsEvent, context);
 
             Assert.Contains("Processed message foobar", logger.Buffer.ToString());
