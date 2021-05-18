@@ -11,9 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PersisteDocDb.Lambda", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PersisteDocDb.Lambda.Tests", "src\PersisteDocDb.Lambda.Tests\PersisteDocDb.Lambda.Tests.csproj", "{2C3C2B97-22AD-492D-B0A7-A314B11301E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pacote.Core.Domain.Model", "src\Pacote.Core.Domain.Model\Pacote.Core.Domain.Model.csproj", "{CE42DFA3-E4DF-4C78-B873-AD8569D9DF7E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pacote.Core.Domain.Model", "src\Pacote.Core.Domain.Model\Pacote.Core.Domain.Model.csproj", "{CE42DFA3-E4DF-4C78-B873-AD8569D9DF7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pacote.Core.Domain.Util", "src\Pacote.Core.Domain.Util\Pacote.Core.Domain.Util.csproj", "{E09B0015-7E67-41B3-84A6-B104DED8CF73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pacote.Core.Domain.Util", "src\Pacote.Core.Domain.Util\Pacote.Core.Domain.Util.csproj", "{E09B0015-7E67-41B3-84A6-B104DED8CF73}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pacote.Infrastructure.Data", "src\Pacote.Infrastructure.Data\Pacote.Infrastructure.Data.csproj", "{1DDEFE26-F962-42ED-AEC2-4A12C32E59B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +39,10 @@ Global
 		{E09B0015-7E67-41B3-84A6-B104DED8CF73}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E09B0015-7E67-41B3-84A6-B104DED8CF73}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E09B0015-7E67-41B3-84A6-B104DED8CF73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DDEFE26-F962-42ED-AEC2-4A12C32E59B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DDEFE26-F962-42ED-AEC2-4A12C32E59B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DDEFE26-F962-42ED-AEC2-4A12C32E59B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DDEFE26-F962-42ED-AEC2-4A12C32E59B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 		{2C3C2B97-22AD-492D-B0A7-A314B11301E0} = {EF8F7603-B183-4651-8AA9-F9B29D386559}
 		{CE42DFA3-E4DF-4C78-B873-AD8569D9DF7E} = {36B23DEC-03DE-406C-9E81-84A7345E9834}
 		{E09B0015-7E67-41B3-84A6-B104DED8CF73} = {36B23DEC-03DE-406C-9E81-84A7345E9834}
+		{1DDEFE26-F962-42ED-AEC2-4A12C32E59B6} = {36B23DEC-03DE-406C-9E81-84A7345E9834}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FFA6E92C-5A68-417B-AD79-389D5FEDF8D7}

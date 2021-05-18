@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PersisteDocDb.Lambda.Application.Mediator
+namespace PersisteDocDb.Lambda.Application.Mediator.Base
 {
     public abstract class BaseRequestHandler<TRequest> : IRequestHandler<TRequest, Result> where TRequest : IRequest<Result>
     {

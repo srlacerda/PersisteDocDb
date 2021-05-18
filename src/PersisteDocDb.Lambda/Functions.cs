@@ -1,17 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-
 using Amazon.Lambda.Core;
 using Amazon.Lambda.SQSEvents;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
+using Pacote.Core.Domain.Model.Enums;
+using Pacote.Core.Domain.Util.DocumentDB;
+using Pacote.Infrastructure.Data.DocumentDB;
 using PersisteDocDb.Lambda.Application.Extensions;
+using PersisteDocDb.Lambda.Domain.Entities;
 using PersisteDocDb.Lambda.Infrastructure.Logging;
 using PersisteDocDb.Lambda.Infrastructure.Repositories;
+using PersisteDocDb.Lambda.Infrastructure.SecretManagerStrategy;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
@@ -23,6 +26,7 @@ namespace PersisteDocDb.Lambda
     {
         protected IServiceProvider _serviceProvider = null;
         protected ServiceCollection _serviceCollection = new ServiceCollection();
+        protected string _database = DatabaseEnum.FidhDocdbTeste.ToString().ToUpper();
         /// <summary>
         /// Default constructor. This constructor is used by Lambda to construct the instance. When invoked in a Lambda environment
         /// the AWS credentials will come from the IAM role associated with the function and the AWS region will be set to the
@@ -30,7 +34,7 @@ namespace PersisteDocDb.Lambda
         /// </summary>
         public Functions()
         {
-            ConfigureServices();
+            ConfigureServices(GetConfiguration());
         }
 
         public Functions(ServiceCollection serviceCollection)
@@ -40,14 +44,21 @@ namespace PersisteDocDb.Lambda
             _serviceProvider = serviceCollection.BuildServiceProvider();
         }
 
-        private void ConfigureServices()
+        private void ConfigureServices(IConfigurationRoot configurationRoot)
         {
-            IConfigurationRoot configuration = GetConfiguration();
+            //IConfigurationRoot configuration = GetConfiguration();
+            IConfigurationRoot configuration = configurationRoot;
 
             _serviceCollection.AddSingleton<IConfiguration>(configuration);
 
             //Repositories
-            _serviceCollection.AddTransient<IPosicaoDocumentRepository, PosicaoDocumentRepository>();
+            _serviceCollection.AddTransient<IDocumentRepository<PosicaoDocument>, PosicaoDocumentRepository>();
+
+            //Infra
+            MongoClient mongoClient = new MongoClient(configuration[$"Database:{_database}CONNECTIONSTRING"]);
+            string defaultDatabase = configuration[$"Database:{_database}DEFAULTDATABASE"];
+
+            _serviceCollection.AddScoped<IDocumentCollection<PosicaoDocument>>(sp => InstanceDocumentCollection<PosicaoDocument>(mongoClient, defaultDatabase, "posicao"));
 
             _serviceCollection.AddMediatorHandlers(typeof(Functions).Assembly);
             _serviceCollection.AddSingleton<ILogger, Logger>();
@@ -57,14 +68,28 @@ namespace PersisteDocDb.Lambda
             _serviceProvider = _serviceCollection.BuildServiceProvider();
         }
 
+        private IDocumentCollection<T> InstanceDocumentCollection<T>(MongoClient mongoClient, string databaseId, string collectionId) where T : IDocument
+        {
+            return new DocumentCollection<T>(mongoClient, databaseId, collectionId);
+        }
+
         private static IConfigurationRoot GetConfiguration()
         {
+//#if DEBUG
+//            var env = "dev";
+//#else
+//            var env = Environment.GetEnvironmentVariable("env");
+//#endif
+
             IConfigurationBuilder builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile($"appsettings.json")
+                //.AddJsonFile($"appsettings.{env}.json")
                 .AddEnvironmentVariables();
 
             var configuration = builder.Build();
+
+            configuration.AddDatabaseConnectionString(new SecretMongo(DatabaseEnum.FidhDocdbTeste.ToString().ToUpper()));
 
             return configuration;
         }

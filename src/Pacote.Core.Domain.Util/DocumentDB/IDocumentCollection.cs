@@ -10,11 +10,8 @@ namespace Pacote.Core.Domain.Util.DocumentDB
     {
         Task CreateDocumentAsync(T document);
         Task DeleteDocumentAsync(string documentId);
-
         Task<List<T>> FindAsync(Expression<Func<T, bool>> filter = null, int page = 0, int size = 50);
-
-        Task<List<T>> FindAsync(FilterDefinition<T> filter = null, int page = 0, int size = 50, string sorte = "desc", string orderBy = "StoreNumber");
-
-
+        Task<List<T>> FindAsync(FilterDefinition<T> filter = null, int page = 0, int size = 50, string sort = "desc", string orderBy = "StoreNumber");
+        ReplaceOneResult ReplaceOne(FilterDefinition<T> filter, T document, ReplaceOptions options = null);
     }
 }

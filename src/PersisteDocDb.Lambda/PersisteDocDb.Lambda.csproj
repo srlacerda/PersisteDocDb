@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
@@ -11,6 +11,8 @@
     <PackageReference Include="Amazon.Lambda.Core" Version="1.2.0" />
     <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.1.0" />
     <PackageReference Include="Amazon.Lambda.SQSEvents" Version="1.2.0" />
+    <PackageReference Include="AWSSDK.SecretsManager" Version="3.7.0.14" />
+    <PackageReference Include="AWSSDK.SQS" Version="3.7.0.14" />
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
@@ -19,15 +21,20 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Domain\Constants\" />
-    <Folder Include="Domain\Enums\" />
-    <Folder Include="Infrastructure\Messaging\" />
     <Folder Include="Infrastructure\S3\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Pacote.Core.Domain.Model\Pacote.Core.Domain.Model.csproj" />
     <ProjectReference Include="..\Pacote.Core.Domain.Util\Pacote.Core.Domain.Util.csproj" />
+    <ProjectReference Include="..\Pacote.Infrastructure.Data\Pacote.Infrastructure.Data.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

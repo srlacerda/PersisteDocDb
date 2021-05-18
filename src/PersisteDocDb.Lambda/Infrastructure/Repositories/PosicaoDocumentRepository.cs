@@ -1,22 +1,33 @@
-﻿using Pacote.Core.Domain.Util.DocumentDB;
+﻿using MongoDB.Driver;
+using Pacote.Core.Domain.Util.DocumentDB;
 using PersisteDocDb.Lambda.Domain.Entities;
 using System.Threading.Tasks;
 
 namespace PersisteDocDb.Lambda.Infrastructure.Repositories
 {
-    public class PosicaoDocumentRepository : IPosicaoDocumentRepository
+    public class PosicaoDocumentRepository : IDocumentRepository<PosicaoDocument>
     {
         private readonly IDocumentCollection<PosicaoDocument> _collection;
         public PosicaoDocumentRepository(IDocumentCollection<PosicaoDocument> collection)
         {
             _collection = collection;
         }
+
         //public async Task InserirPosicaoAsync(PosicaoDocument posicaoDocument)
-        public async Task InserirPosicaoAsync(PosicaoDocument posicaoDocument)
+        //{
+        //    await _collection.CreateDocumentAsync(posicaoDocument);
+        //}
+
+        //public Task InserirPosicao(PosicaoDocument posicaoDocument)
+        //{
+        //    _collection.CreateDocumentAsync(posicaoDocument).ConfigureAwait(true);
+        //    return Task.CompletedTask;
+        //}
+        public long PersisteDocumentReplaceOne(PosicaoDocument document)
         {
-            //await _collection.CreateDocumentAsync(posicaoDocument);
-            await _collection.CreateDocumentAsync(posicaoDocument);
-            //await Task.CompletedTask;
+            var filter = Builders<PosicaoDocument>.Filter.Eq("_id", document.Id);
+            var result = _collection.ReplaceOne(filter, document, new ReplaceOptions { IsUpsert = true });
+            return result.ModifiedCount;
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PersisteDocDb.Lambda.Application.Mediator
+namespace PersisteDocDb.Lambda.Application.Mediator.Base
 {
     public abstract class BaseNotificationHandler<TNotification> : INotificationHandler<TNotification> where TNotification : INotification
     {
