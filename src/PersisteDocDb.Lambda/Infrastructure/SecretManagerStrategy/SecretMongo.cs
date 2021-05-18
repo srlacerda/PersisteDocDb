@@ -10,7 +10,8 @@ namespace PersisteDocDb.Lambda.Infrastructure.SecretManagerStrategy
             _secretName = secretName;
         }
 
-        private string GetConnectionString(ref dynamic secret)
+        //private string GetConnectionString(ref dynamic secret)
+        private string GetConnectionString(dynamic secret)
         {
             return $"mongodb://{secret.username}:{secret.password}@{secret.host}:{secret.port}/?retryWrites=false";
         }
@@ -20,9 +21,10 @@ namespace PersisteDocDb.Lambda.Infrastructure.SecretManagerStrategy
             return _secretName;
         }
 
-        public void SetConfiguration(ref IConfiguration configuration, ref dynamic secret)
+        //public void SetConfiguration(ref IConfiguration configuration, ref dynamic secret)
+        public void SetConfiguration(ref IConfiguration configuration, dynamic secret)
         {
-            configuration[$"Database:{_secretName}CONNECTIONSTRING"] = GetConnectionString(ref secret);
+            configuration[$"Database:{_secretName}CONNECTIONSTRING"] = GetConnectionString(secret);
         }
     }
 }
