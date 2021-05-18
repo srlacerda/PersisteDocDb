@@ -19,7 +19,7 @@ namespace PersisteDocDb.Lambda.Application.Mediator.Base
             Logger = logger;
         }
 
-        internal abstract string ValidateRequest(TRequest notification);
+        internal abstract string ValidateRequest(TRequest request);
 
         protected abstract bool RequiresValidation();
 

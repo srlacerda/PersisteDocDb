@@ -23,7 +23,7 @@ namespace PersisteDocDb.Lambda.Infrastructure.SecretManagerStrategy
             return _secretName;
         }
 
-        public void SetConfiguration(ref IConfiguration configuration, ref dynamic secret)
+        public void SetConfiguration(ref IConfiguration configuration, dynamic secret)
         {
             configuration[$"Database:{_secretName}CONNECTIONSTRING"] = GetConnectionString(ref secret);
         }

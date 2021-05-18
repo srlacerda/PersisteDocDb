@@ -1,7 +1,6 @@
 ﻿using MongoDB.Driver;
 using Pacote.Core.Domain.Util.DocumentDB;
 using PersisteDocDb.Lambda.Domain.Entities;
-using System.Threading.Tasks;
 
 namespace PersisteDocDb.Lambda.Infrastructure.Repositories
 {
@@ -11,6 +10,12 @@ namespace PersisteDocDb.Lambda.Infrastructure.Repositories
         public PosicaoDocumentRepository(IDocumentCollection<PosicaoDocument> collection)
         {
             _collection = collection;
+        }
+        public long PersisteDocumentReplaceOne(PosicaoDocument document)
+        {
+            var filter = Builders<PosicaoDocument>.Filter.Eq("_id", document.Id);
+            var result = _collection.ReplaceOne(filter, document, new ReplaceOptions { IsUpsert = true });
+            return result.ModifiedCount;
         }
 
         //public async Task InserirPosicaoAsync(PosicaoDocument posicaoDocument)
@@ -23,11 +28,5 @@ namespace PersisteDocDb.Lambda.Infrastructure.Repositories
         //    _collection.CreateDocumentAsync(posicaoDocument).ConfigureAwait(true);
         //    return Task.CompletedTask;
         //}
-        public long PersisteDocumentReplaceOne(PosicaoDocument document)
-        {
-            var filter = Builders<PosicaoDocument>.Filter.Eq("_id", document.Id);
-            var result = _collection.ReplaceOne(filter, document, new ReplaceOptions { IsUpsert = true });
-            return result.ModifiedCount;
-        }
     }
 }

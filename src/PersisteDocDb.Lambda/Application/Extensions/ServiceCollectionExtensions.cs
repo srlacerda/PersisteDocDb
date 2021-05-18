@@ -46,12 +46,10 @@ namespace PersisteDocDb.Lambda.Application.Extensions
 
         }
 
-        public static void AddDatabaseConnectionString(this IConfiguration configuration, ITypeSecret typeSecret)
+        //public static void AddDatabaseConnectionString(this IConfiguration configuration, ITypeSecret typeSecret)
+        public static void AddDatabaseConnectionString(this IConfiguration configuration, IAmazonSecretsManager amazonSecretsManager, ITypeSecret typeSecret)
         {
-            string region = Environment.GetEnvironmentVariable("AWS_REGION");
             dynamic secret;
-
-            IAmazonSecretsManager client = new AmazonSecretsManagerClient(RegionEndpoint.GetBySystemName(region));
 
             GetSecretValueRequest request = new GetSecretValueRequest
             {
@@ -59,7 +57,7 @@ namespace PersisteDocDb.Lambda.Application.Extensions
                 VersionStage = "AWSCURRENT"
             };
 
-            GetSecretValueResponse response = client.GetSecretValueAsync(request).Result;
+            GetSecretValueResponse response = amazonSecretsManager.GetSecretValueAsync(request).Result;
 
             if (response.SecretString != null)
             {
@@ -78,7 +76,7 @@ namespace PersisteDocDb.Lambda.Application.Extensions
             string engine = secret.engine;
             LambdaLogger.Log(engine);
 
-            typeSecret.SetConfiguration(ref configuration, ref secret);
+            typeSecret.SetConfiguration(ref configuration, secret);
 
             //TODO APAGAR DEPOIS
             LambdaLogger.Log(configuration[$"Database:{typeSecret.GetSecretName()}CONNECTIONSTRING"]);

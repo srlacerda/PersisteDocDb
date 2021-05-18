@@ -5,9 +5,9 @@ using PersisteDocDb.Lambda.Domain.Entities;
 
 namespace PersisteDocDb.Lambda.Infrastructure.Factory
 {
-    public class PosicaoFactory : IDocumentFactory<PosicaoDocument>
+    public class OperacaoFactory : IDocumentFactory<OperacaoDocument>
     {
-        public PublicarDocumentPersistidoCommand CreatePublicarDocumentPersistidoCommand(PosicaoDocument document)
+        public PublicarDocumentPersistidoCommand CreatePublicarDocumentPersistidoCommand(OperacaoDocument document)
         {
             var documentoPublicado = GetDocumentoPublicado(document);
             var publicarDocumentPersistidoCommand = new PublicarDocumentPersistidoCommand
@@ -16,11 +16,11 @@ namespace PersisteDocDb.Lambda.Infrastructure.Factory
             };
             return publicarDocumentPersistidoCommand;
         }
-        public PosicaoDocument DeserializeDocument(string message)
+        public OperacaoDocument DeserializeDocument(string message)
         {
-            return JsonConvert.DeserializeObject<PosicaoDocument>(message);
+            return JsonConvert.DeserializeObject<OperacaoDocument>(message);
         }
-        private DocumentoPublicado GetDocumentoPublicado(PosicaoDocument document)
+        private DocumentoPublicado GetDocumentoPublicado(OperacaoDocument document)
         {
             return new DocumentoPublicado
             {

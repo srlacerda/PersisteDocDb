@@ -1,5 +1,7 @@
+using Amazon;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.SQSEvents;
+using Amazon.SecretsManager;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +11,7 @@ using Pacote.Core.Domain.Util.DocumentDB;
 using Pacote.Infrastructure.Data.DocumentDB;
 using PersisteDocDb.Lambda.Application.Extensions;
 using PersisteDocDb.Lambda.Domain.Entities;
+using PersisteDocDb.Lambda.Infrastructure.Factory;
 using PersisteDocDb.Lambda.Infrastructure.Logging;
 using PersisteDocDb.Lambda.Infrastructure.Repositories;
 using PersisteDocDb.Lambda.Infrastructure.SecretManagerStrategy;
@@ -51,14 +54,20 @@ namespace PersisteDocDb.Lambda
 
             _serviceCollection.AddSingleton<IConfiguration>(configuration);
 
+            //Factory
+            _serviceCollection.AddTransient<IDocumentFactory<PosicaoDocument>, PosicaoFactory>();
+            _serviceCollection.AddTransient<IDocumentFactory<OperacaoDocument>, OperacaoFactory>();
+
             //Repositories
             _serviceCollection.AddTransient<IDocumentRepository<PosicaoDocument>, PosicaoDocumentRepository>();
+            _serviceCollection.AddTransient<IDocumentRepository<OperacaoDocument>, OperacaoDocumentRepository>();
 
             //Infra
             MongoClient mongoClient = new MongoClient(configuration[$"Database:{_database}CONNECTIONSTRING"]);
             string defaultDatabase = configuration[$"Database:{_database}DEFAULTDATABASE"];
 
             _serviceCollection.AddScoped<IDocumentCollection<PosicaoDocument>>(sp => InstanceDocumentCollection<PosicaoDocument>(mongoClient, defaultDatabase, "posicao"));
+            _serviceCollection.AddScoped<IDocumentCollection<OperacaoDocument>>(sp => InstanceDocumentCollection<OperacaoDocument>(mongoClient, defaultDatabase, "operacao"));
 
             _serviceCollection.AddMediatorHandlers(typeof(Functions).Assembly);
             _serviceCollection.AddSingleton<ILogger, Logger>();
@@ -88,8 +97,10 @@ namespace PersisteDocDb.Lambda
                 .AddEnvironmentVariables();
 
             var configuration = builder.Build();
-
-            configuration.AddDatabaseConnectionString(new SecretMongo(DatabaseEnum.FidhDocdbTeste.ToString().ToUpper()));
+            
+            configuration.AddDatabaseConnectionString(
+                new AmazonSecretsManagerClient(RegionEndpoint.GetBySystemName(configuration["AWS_REGION"])),
+                new SecretMongo(DatabaseEnum.FidhDocdbTeste.ToString().ToUpper()));
 
             return configuration;
         }
