@@ -1,15 +1,18 @@
 using Amazon;
 using Amazon.Lambda.Core;
+using Amazon.Lambda.SNSEvents;
 using Amazon.Lambda.SQSEvents;
 using Amazon.SecretsManager;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
+using Newtonsoft.Json;
 using Pacote.Core.Domain.Model.Enums;
 using Pacote.Core.Domain.Util.DocumentDB;
 using Pacote.Infrastructure.Data.DocumentDB;
 using PersisteDocDb.Lambda.Application.Extensions;
+using PersisteDocDb.Lambda.Application.Mediator.Commands;
 using PersisteDocDb.Lambda.Domain.Entities;
 using PersisteDocDb.Lambda.Infrastructure.Factory;
 using PersisteDocDb.Lambda.Infrastructure.Logging;
@@ -17,6 +20,7 @@ using PersisteDocDb.Lambda.Infrastructure.Repositories;
 using PersisteDocDb.Lambda.Infrastructure.SecretManagerStrategy;
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -84,11 +88,11 @@ namespace PersisteDocDb.Lambda
 
         private static IConfigurationRoot GetConfiguration()
         {
-//#if DEBUG
-//            var env = "dev";
-//#else
-//            var env = Environment.GetEnvironmentVariable("env");
-//#endif
+            //#if DEBUG
+            //            var env = "dev";
+            //#else
+            //            var env = Environment.GetEnvironmentVariable("env");
+            //#endif
 
             IConfigurationBuilder builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -97,7 +101,7 @@ namespace PersisteDocDb.Lambda
                 .AddEnvironmentVariables();
 
             var configuration = builder.Build();
-            
+
             configuration.AddDatabaseConnectionString(
                 new AmazonSecretsManagerClient(RegionEndpoint.GetBySystemName(configuration["AWS_REGION"])),
                 new SecretMongo(DatabaseEnum.FidhDocdbTeste.ToString().ToUpper()));
@@ -128,5 +132,70 @@ namespace PersisteDocDb.Lambda
             // TODO: Do interesting work based on the new message
             await Task.CompletedTask;
         }
+
+        private void TratarSqsEventBySnsTopic(SQSEvent evnt)
+        {
+            if (evnt.Records != null)
+            {
+                if (evnt.Records.Count.Equals(1))
+                {
+                    if (evnt.Records[0].Body.Contains("TopicArn")
+                        &&
+                        evnt.Records[0].Body.Contains("Message")
+                        )
+                    {
+                        var snsMessage = JsonConvert.DeserializeObject<SNSEvent.SNSMessage>(evnt.Records[0].Body);
+                        evnt.Records[0].Body = snsMessage.Message;
+                    }
+                }
+            }
+        }
+
+        public void PersistPosicaoDataHub(SQSEvent evnt)
+        {
+            TratarSqsEventBySnsTopic(evnt);
+            foreach (var message in evnt.Records)
+            {
+                PersistPosicaoDataHubMessage(message);
+            }
+        }
+
+        private void PersistPosicaoDataHubMessage(SQSEvent.SQSMessage message)
+        {
+            #region 01 - Persiste a Posicao no DocumentDb
+            var persistePosicaoCommand = new PersistePosicaoCommand
+            {
+                Message = message.Body
+            };
+
+            var mediator = _serviceProvider.GetService<IMediator>();
+
+            mediator.Send(persistePosicaoCommand, CancellationToken.None);
+            #endregion
+        }
+
+        public void PersistOperacaoDataHub(SQSEvent evnt)
+        {
+            TratarSqsEventBySnsTopic(evnt);
+            foreach (var message in evnt.Records)
+            {
+                PersistOperacaoDataHubMessage(message);
+            }
+        }
+
+        private void PersistOperacaoDataHubMessage(SQSEvent.SQSMessage message)
+        {
+            #region 01 - Persiste a Operacao no DocumentDb
+            var persisteOperacaoCommand = new PersisteOperacaoCommand
+            {
+                Message = message.Body
+            };
+
+            var mediator = _serviceProvider.GetService<IMediator>();
+
+            mediator.Send(persisteOperacaoCommand, CancellationToken.None);
+            #endregion
+        }
+
     }
 }
