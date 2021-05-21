@@ -36,13 +36,13 @@ namespace PersisteDocDb.Lambda.Application.Mediator.Base
 
                     if (!string.IsNullOrEmpty(validationMessage))
                     {
-                        result = new Result
-                        {
-                            Sucess = false,
-                            Exception = new ArgumentException(validationMessage)
-                        };
-                        
-                        return Task.FromResult(result);
+                        //result = new Result
+                        //{
+                        //    Sucess = false,
+                        //    Exception = new ArgumentException(validationMessage)
+                        //};
+                        //return Task.FromResult(result);
+                        throw new ArgumentException(validationMessage);
                     };
                 }
 
@@ -59,20 +59,17 @@ namespace PersisteDocDb.Lambda.Application.Mediator.Base
             }
             catch (Exception e)
             {
-                var stringBuilder = new StringBuilder("An error has occurred during the request.");
-
-                //stringBuilder.AppendLine($"Message: {e.GetFullMessage()}");
-                stringBuilder.AppendLine($"Message: {e.Message}");
-
-                Logger.Error(stringBuilder.ToString());
-
-                result = new Result
-                {
-                    Exception = e,
-                    Sucess = false
-                };
-
-                return Task.FromResult(result);
+                Logger.Error(e, "An error has occurred during the request.");
+                throw;
+                //var stringBuilder = new StringBuilder("An error has occurred during the request.");
+                //stringBuilder.AppendLine($"Message: {e.Message}");
+                //Logger.Error(stringBuilder.ToString());
+                //result = new Result
+                //{
+                //    Exception = e,
+                //    Sucess = false
+                //};
+                //return Task.FromResult(result);
             }
 
             return Task.FromResult(result);

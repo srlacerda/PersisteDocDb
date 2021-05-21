@@ -13,30 +13,30 @@ namespace PersisteDocDb.Lambda.Tests
 {
     public class FunctionTest
     {
-        [Fact]
-        public async Task TestSQSEventLambdaFunction()
-        {
-            var sqsEvent = new SQSEvent
-            {
-                Records = new List<SQSEvent.SQSMessage>
-                {
-                    new SQSEvent.SQSMessage
-                    {
-                        Body = "foobar"
-                    }
-                }
-            };
+        //[Fact]
+        //public async Task TestSQSEventLambdaFunction()
+        //{
+        //    var sqsEvent = new SQSEvent
+        //    {
+        //        Records = new List<SQSEvent.SQSMessage>
+        //        {
+        //            new SQSEvent.SQSMessage
+        //            {
+        //                Body = "foobar"
+        //            }
+        //        }
+        //    };
 
-            var logger = new TestLambdaLogger();
-            var context = new TestLambdaContext
-            {
-                Logger = logger
-            };
+        //    var logger = new TestLambdaLogger();
+        //    var context = new TestLambdaContext
+        //    {
+        //        Logger = logger
+        //    };
 
-            //var function = new Functions();
-            //await function.FunctionHandler(sqsEvent, context);
+        //    var function = new Functions();
+        //    await function.FunctionHandler(sqsEvent, context);
 
-            //Assert.Contains("Processed message foobar", logger.Buffer.ToString());
-        }
+        //    Assert.Contains("Processed message foobar", logger.Buffer.ToString());
+        //}
     }
 }
