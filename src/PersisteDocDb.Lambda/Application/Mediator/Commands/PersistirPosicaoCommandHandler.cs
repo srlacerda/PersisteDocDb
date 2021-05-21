@@ -13,14 +13,13 @@ using System.Threading;
 
 namespace PersisteDocDb.Lambda.Application.Mediator.Commands
 {
-    public class PersisteOperacaoCommandHandler : BaseRequestHandler<PersisteOperacaoCommand>
+    public class PersistirPosicaoCommandHandler : BaseRequestHandler<PersistirPosicaoCommand>
     {
-        
         private readonly IMediator _mediator;
-        private readonly IDocumentRepository<OperacaoDocument> _documentRepository;
-        private readonly IDocumentFactory<OperacaoDocument> _documentFactory;
-        public PersisteOperacaoCommandHandler(IMediator mediator, ILogger logger,
-            IDocumentRepository<OperacaoDocument> documentRepository, IDocumentFactory<OperacaoDocument> documentFactory)
+        private readonly IDocumentRepository<PosicaoDocument> _documentRepository;
+        private readonly IDocumentFactory<PosicaoDocument> _documentFactory;
+        public PersistirPosicaoCommandHandler(IMediator mediator, ILogger logger, 
+            IDocumentRepository<PosicaoDocument> documentRepository, IDocumentFactory<PosicaoDocument> documentFactory)
             : base(logger)
         {
             _mediator = mediator;
@@ -32,26 +31,26 @@ namespace PersisteDocDb.Lambda.Application.Mediator.Commands
             return true;
         }
 
-        internal override Result Execute(PersisteOperacaoCommand request, CancellationToken cancellationToken)
+        internal override Result Execute(PersistirPosicaoCommand request, CancellationToken cancellationToken)
         {
-            Logger.Info($"PersisteOperacaoCommand. Message: '{request.Message}'");
+            Logger.Info($"PersistePosicaoCommand. Message: '{request.Message}'");
             var document = _documentFactory.DeserializeDocument(request.Message);
 
             Logger.Info($"Persisting at DocumentDB - Id: '{document.Id}'");
-            var replaceResult = _documentRepository.PersisteDocumentReplaceOne(document);
+            var replaceResult = _documentRepository.PersistirDocumentReplaceOne(document);
             Logger.Info(replaceResult.Equals(0) ? "Document inserted" : "Document updated");
 
             var createPublicarDocumentPersistidoCommand = _documentFactory.CreatePublicarDocumentPersistidoCommand(document);
 
             var result = _mediator.Send(createPublicarDocumentPersistidoCommand, cancellationToken).Result;
-
+            
             return new Result
             {
                 Sucess = true
             };
         }
 
-        internal override string ValidateRequest(PersisteOperacaoCommand request)
+        internal override string ValidateRequest(PersistirPosicaoCommand request)
         {
             if (request.Message == null)
             {
@@ -62,7 +61,7 @@ namespace PersisteDocDb.Lambda.Application.Mediator.Commands
 
             var document = _documentFactory.DeserializeDocument(request.Message);
 
-            if (document.DataOperacao.Equals(DateTime.MinValue))
+            if (document.DataPosicao.Equals(DateTime.MinValue))
             {
                 validationMessage.Append("DataPosicao is required ");
             }

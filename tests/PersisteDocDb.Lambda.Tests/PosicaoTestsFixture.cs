@@ -16,14 +16,14 @@ namespace PersisteDocDb.Lambda.Tests
 
     public class PosicaoTestsFixture : IDisposable
     {
-        public PersistePosicaoCommandHandler PersistePosicaoCommandHandler;
+        public PersistirPosicaoCommandHandler PersistirPosicaoCommandHandler;
         public AutoMocker Mocker;
 
-        public PersistePosicaoCommandHandler ObterPersistePosicaoCommandHandler()
+        public PersistirPosicaoCommandHandler ObterPersistirPosicaoCommandHandler()
         {
             Mocker = new AutoMocker();
-            PersistePosicaoCommandHandler = Mocker.CreateInstance<PersistePosicaoCommandHandler>();
-            return PersistePosicaoCommandHandler;
+            PersistirPosicaoCommandHandler = Mocker.CreateInstance<PersistirPosicaoCommandHandler>();
+            return PersistirPosicaoCommandHandler;
         }
 
         public PosicaoDocument GerarPosicaoDocumentValida()

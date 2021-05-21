@@ -151,49 +151,49 @@ namespace PersisteDocDb.Lambda
             }
         }
 
-        public void PersistPosicaoDataHub(SQSEvent evnt)
+        public void PersistirPosicaoDataHub(SQSEvent evnt)
         {
             TratarSqsEventBySnsTopic(evnt);
             foreach (var message in evnt.Records)
             {
-                PersistPosicaoDataHubMessage(message);
+                PersistirPosicaoDataHubMessage(message);
             }
         }
 
-        private void PersistPosicaoDataHubMessage(SQSEvent.SQSMessage message)
+        private void PersistirPosicaoDataHubMessage(SQSEvent.SQSMessage message)
         {
             #region 01 - Persiste a Posicao no DocumentDb
-            var persistePosicaoCommand = new PersistePosicaoCommand
+            var persistirPosicaoCommand = new PersistirPosicaoCommand
             {
                 Message = message.Body
             };
 
             var mediator = _serviceProvider.GetService<IMediator>();
 
-            mediator.Send(persistePosicaoCommand, CancellationToken.None);
+            mediator.Send(persistirPosicaoCommand, CancellationToken.None);
             #endregion
         }
 
-        public void PersistOperacaoDataHub(SQSEvent evnt)
+        public void PersistirOperacaoDataHub(SQSEvent evnt)
         {
             TratarSqsEventBySnsTopic(evnt);
             foreach (var message in evnt.Records)
             {
-                PersistOperacaoDataHubMessage(message);
+                PersistirOperacaoDataHubMessage(message);
             }
         }
 
-        private void PersistOperacaoDataHubMessage(SQSEvent.SQSMessage message)
+        private void PersistirOperacaoDataHubMessage(SQSEvent.SQSMessage message)
         {
             #region 01 - Persiste a Operacao no DocumentDb
-            var persisteOperacaoCommand = new PersisteOperacaoCommand
+            var persistirOperacaoCommand = new PersistirOperacaoCommand
             {
                 Message = message.Body
             };
 
             var mediator = _serviceProvider.GetService<IMediator>();
 
-            mediator.Send(persisteOperacaoCommand, CancellationToken.None);
+            mediator.Send(persistirOperacaoCommand, CancellationToken.None);
             #endregion
         }
 

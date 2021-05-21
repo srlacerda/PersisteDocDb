@@ -3,7 +3,7 @@ using PersisteDocDb.Lambda.Domain.Base;
 
 namespace PersisteDocDb.Lambda.Application.Mediator.Commands
 {
-    public class PersisteOperacaoCommand : IRequest<Result>
+    public class PersistirPosicaoCommand : IRequest<Result>
     {
         public string Message { get; set; }
     }

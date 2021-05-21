@@ -2,9 +2,6 @@
 using Amazon.SQS.Model;
 using Microsoft.Extensions.Configuration;
 using Pacote.Core.Domain.Model.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,9 +14,9 @@ namespace PersisteDocDb.Lambda.Infrastructure.Messaging
         {
             _amazonSQS = amazonSQS;
         }
-        public string GetSqsPublicarDocumentPersistido(MercadoEnum mercado, IConfiguration configuration)
+        public string GetSqsPublicarDocumentPersistidoByMercado(MercadoEnum mercado, IConfiguration configuration)
         {
-            string settings = $"SqsValidaPosicaoByMercado";
+            string settings = $"SqsDocumentPersistidoByMercado";
             string mercadoString = mercado.ToString();
             return configuration[$"{settings}:{mercadoString}"];
         }

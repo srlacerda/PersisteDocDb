@@ -9,10 +9,10 @@ namespace PersisteDocDb.Lambda.Infrastructure.Factory
     {
         public PublicarDocumentPersistidoCommand CreatePublicarDocumentPersistidoCommand(PosicaoDocument document)
         {
-            var documentoPublicado = GetDocumentoPublicado(document);
+            var documentPersistido = GetDocumentPersistidoByPosicao(document);
             var publicarDocumentPersistidoCommand = new PublicarDocumentPersistidoCommand
             {
-                Message = JsonConvert.SerializeObject(documentoPublicado)
+                Message = JsonConvert.SerializeObject(documentPersistido)
             };
             return publicarDocumentPersistidoCommand;
         }
@@ -20,9 +20,9 @@ namespace PersisteDocDb.Lambda.Infrastructure.Factory
         {
             return JsonConvert.DeserializeObject<PosicaoDocument>(message);
         }
-        private DocumentoPublicado GetDocumentoPublicado(PosicaoDocument document)
+        private DocumentPersistido GetDocumentPersistidoByPosicao(PosicaoDocument document)
         {
-            return new DocumentoPublicado
+            return new DocumentPersistido
             {
                 DocumentCollection = "posicao",
                 Id = document.Id

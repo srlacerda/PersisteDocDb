@@ -11,7 +11,7 @@ namespace PersisteDocDb.Lambda.Infrastructure.Repositories
         {
             _collection = collection;
         }
-        public long PersisteDocumentReplaceOne(OperacaoDocument document)
+        public long PersistirDocumentReplaceOne(OperacaoDocument document)
         {
             var filter = Builders<OperacaoDocument>.Filter.Eq("_id", document.Id);
             var result = _collection.ReplaceOne(filter, document, new ReplaceOptions { IsUpsert = true });

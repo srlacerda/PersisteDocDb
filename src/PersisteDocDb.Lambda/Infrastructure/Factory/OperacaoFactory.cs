@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Pacote.Core.Domain.Model.Contratos;
 using PersisteDocDb.Lambda.Application.Mediator.Commands;
 using PersisteDocDb.Lambda.Domain.Entities;
 
@@ -9,10 +8,10 @@ namespace PersisteDocDb.Lambda.Infrastructure.Factory
     {
         public PublicarDocumentPersistidoCommand CreatePublicarDocumentPersistidoCommand(OperacaoDocument document)
         {
-            var documentoPublicado = GetDocumentoPublicado(document);
+            var documentPersistido = GetDocumentPersistidoByOperacao(document);
             var publicarDocumentPersistidoCommand = new PublicarDocumentPersistidoCommand
             {
-                Message = JsonConvert.SerializeObject(documentoPublicado)
+                Message = JsonConvert.SerializeObject(documentPersistido)
             };
             return publicarDocumentPersistidoCommand;
         }
@@ -20,9 +19,9 @@ namespace PersisteDocDb.Lambda.Infrastructure.Factory
         {
             return JsonConvert.DeserializeObject<OperacaoDocument>(message);
         }
-        private DocumentoPublicado GetDocumentoPublicado(OperacaoDocument document)
+        private DocumentPersistido GetDocumentPersistidoByOperacao(OperacaoDocument document)
         {
-            return new DocumentoPublicado
+            return new DocumentPersistido
             {
                 DocumentCollection = "posicao",
                 Id = document.Id

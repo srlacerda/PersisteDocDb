@@ -13,14 +13,14 @@ namespace PersisteDocDb.Lambda.Tests
     { }
     public class OperacaoTestsFixture : IDisposable
     {
-        public PersisteOperacaoCommandHandler PersisteOperacaoCommandHandler;
+        public PersistirOperacaoCommandHandler PersistirOperacaoCommandHandler;
         public AutoMocker Mocker;
 
-        public PersisteOperacaoCommandHandler ObterPersisteOperacaoCommandHandler()
+        public PersistirOperacaoCommandHandler ObterPersistirOperacaoCommandHandler()
         {
             Mocker = new AutoMocker();
-            PersisteOperacaoCommandHandler = Mocker.CreateInstance<PersisteOperacaoCommandHandler>();
-            return PersisteOperacaoCommandHandler;
+            PersistirOperacaoCommandHandler = Mocker.CreateInstance<PersistirOperacaoCommandHandler>();
+            return PersistirOperacaoCommandHandler;
         }
 
         public void Dispose()

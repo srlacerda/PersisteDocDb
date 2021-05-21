@@ -10,6 +10,6 @@ namespace PersisteDocDb.Lambda.Infrastructure.Repositories
     public interface IDocumentRepository<T> where T : IDocument
     {
         //Task InserirPosicaoAsync(PosicaoDocument posicaoDocument);
-        long PersisteDocumentReplaceOne(T document);
+        long PersistirDocumentReplaceOne(T document);
     }
 }
