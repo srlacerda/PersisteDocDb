@@ -7,7 +7,6 @@ using PersisteDocDb.Lambda.Infrastructure.Factory;
 using PersisteDocDb.Lambda.Infrastructure.Logging;
 using PersisteDocDb.Lambda.Infrastructure.Repositories;
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 
