@@ -154,9 +154,12 @@ namespace PersisteDocDb.Lambda
         public void PersistirPosicaoDataHub(SQSEvent evnt)
         {
             TratarSqsEventBySnsTopic(evnt);
-            foreach (var message in evnt.Records)
+            if (evnt.Records != null)
             {
-                PersistirPosicaoDataHubMessage(message);
+                foreach (var message in evnt.Records)
+                {
+                    PersistirPosicaoDataHubMessage(message);
+                }
             }
         }
 
